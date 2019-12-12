@@ -1,38 +1,260 @@
-.App {
+html {
+  font-family: Whitney-Medium-Pro,Arial,Helvetica,sans-serif
+}
+
+body {
+  margin: 0;
+}
+
+.container { 
+  width: 100%
+}
+
+.cblt-feature-container {
+  max-width: 960px;
+  grid-template-columns: repeat(2, 1fr);
+  display: grid;
+  align-self: center;
+}
+
+.cblt-feature-container-3 {
+  max-width: 960px;
+  grid-template-columns: repeat(3, 1fr);
+  display: grid;
+  align-self: center;
+}
+
+.cblt-feature-container-solo {
+  max-width: 960px;
+  grid-template-columns: 1fr;
+  display: grid;
+  justify-items: center;
+}
+
+.cblt-feature-container-3 .cblt-box:nth-child(2) {
+  padding: 0.5rem;
+  border: 1px solid #aaa;
+  margin: 0;
+}
+
+.cblt-box {
+  display: flex;
+  padding: 1rem;
+  flex-direction: column; 
+  color: #333;
+  border: 1px solid #aaa;
+  margin: 1rem 0.25rem;
+}
+
+.cblt-box-solo {
+  max-width: 438px;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.cblt-section-title {
+  font-size: 2.5rem;
+  font-weight: 100;
+  margin-top: 1rem;
+}
+
+.cblt-banner-image {
+  width: 100%;
+  overflow: hidden;
+  max-height: 400px;
+  object-fit: cover;
+}
+.cblt-product-title {
+  font-size: 2.5rem;
+  font-weight: 100; 
+  margin-bottom: 0.5rem;
+}
+
+.cblt-image-box > img {
+  max-width: 100%; 
+}
+
+.cblt-outer-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.cblt-outer-container-bottom {
+  margin-bottom: 5rem;
+}
+
+.cblt-inner-container {
+  max-width: 960px;
+  width: 100%;
+}
+
+.cblt-menu-bg {
+  background: #c20000;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.cblt-menu {
+  color: #fff;
+  display: flex;
+}
+
+.cblt-menu .cblt-menu-item:nth-child(1) {
+  border-left: 1px solid #000;
+}
+
+.cblt-menu-item {
+  border-right: 1px solid #000;
+  background: #c20000;
+  color: #fff;
+}
+
+.cblt-menu-item:hover {
+  background: #fff;
+  color: #000;
+  transition: 0.3s;
+}
+
+.cblt-menu-item-text {
+  padding: 1rem 2.5rem;
+}
+
+.button-success {
+  color: #fff;
+  background: #c20000;
+  border: 1px solid #c20000;
+  display: block;
+  margin: auto 1rem 0 1rem;
+  text-align: center;
+  border-radius: 4px;
+}
+
+
+.button-success-small {
+  color: #fff;
+  background: #c20000;
+  border: 1px solid #c20000;
+  display: inline-block;
+  margin: 0.5rem 1rem 0 1rem;
+  padding: 0 2rem;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.button-success:hover {
+  color: #c20000;
+  background: #fff;
+  transition: 0.3s;
+}
+
+.button-success-small:hover {
+  color: #c20000;
+  background: #fff;
+  transition: 0.3s;
+}
+
+.button-fail {
+  color: #000;
+  background: #def4f5;
+  border: 1px solid #def4f5;
+  display: block;
+  margin: auto 1rem 0 1rem;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.button-fail:hover {
+  color: #000;
+  background: #fff;
+  border: 1px solid #fff;
+  transition: 0.3s;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.logo-container { 
+  padding: 0.5rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+	align-items: baseline;
+}
+.logo-container > img {
+  filter: invert(100%);
+  height: 3rem;
+  vertical-align: bottom;
+}
+.logo-text {
+  font-size: 2rem;
+  margin: 0 1rem;
+	justify-self: last baseline;
+}
+.login-text {
+  display: inline-flex;
+  margin: 0 1rem;
+	margin-left: auto;
+	align-self: center;
+	border: 2px dashed rgba(0, 0, 0, 0.3);
+	padding: 0.5rem;
+}
+
+.cblt-feature-text-box-center {
+  background: #ace4e5;
+  color: #333;
+  width: 100%;
+  height: 100px;
+  margin-top: 1rem;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-direction: column;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 100;
+  border-bottom: 3px dashed #00c2c2;
+  border-top: 3px dashed #00c2c2;
 }
 
-.App-link {
-  color: #61dafb;
+.cblt-label {
+  color: #222;
+  font-weight: bold;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.cblt-quote {
+  color: #333;
+  font-style: italic;
+}
+
+.cblt-form-container {
+  max-width: 960px;
+  grid-template-columns: 1fr;
+  display: grid;
+  justify-items: center;
+}
+
+.cblt-form-solo {
+  max-width: 438px;
+  width: 100%;
+}
+
+.cblt-form {
+  margin-top: 1rem;
+}
+
+.cblt-form-input {
+  display: block;
+  width: 80%;
+  margin: 0 1rem;
+  border-radius: 6px;
+  padding: 0 0.5rem 0 0.5rem;
+  appearance: none;
+  font-family: Whitney-Medium-Pro,Arial,Helvetica,sans-serif;
+  min-height: 1.5rem;
+  box-sizing: border-box;
+}
+
+.cblt-form-label {
+  display: block;
+  color: rgba(47, 47, 47, 0.8);
+  margin: 0.5rem 1.5rem 0 1.5rem;
+  font-size: 0.8rem;
 }
