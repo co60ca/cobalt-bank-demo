@@ -1,12 +1,21 @@
 
 import React from 'react';
-import {Header} from './Common.js';
+import {changeURL, Header} from './Common.js';
 import FormContainer from './FormContainer.js';
-import {EnterYourDetails, EnterYourWorkHomeDetails, ThanksForYourOrder} from './CommonForms';
+import {ReactiveForm, EnterYourDetails, EnterYourWorkHomeDetails, ThanksForYourOrder} from './CommonForms';
+import {dataObject} from './DataObject.js';
 import './App.css';
 
-export default class Credit extends React.Component {
+const pageLookup = {
+  "credit-flow1": "Credit - Start",
+  "credit-flow2": "Credit - Personal Details",
+  "credit-flow3": "Credit - Work Home Details",
+  "credit-flow4": "Credit - Select Upsell Package",
+  "credit-flow5": "Credit - User Confirmation of Application",
+  "credit-flow6": "Credit - Confirmation of Application",
+}
 
+export default class Credit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,10 +26,13 @@ export default class Credit extends React.Component {
   }
 
 	setPage(pagename, type) {
+    let internalPage = `credit-${pagename}`
 		this.setState({currentPage: pagename});
     if (type) {
       this.setState({currentPage: pagename, type: type});
     }
+    changeURL({}, pageLookup[internalPage], `/credit/${pagename}`);
+    dataObject.update({internalName: internalPage, name: pageLookup[internalPage]});
 	}
 
   render() {
@@ -36,7 +48,7 @@ export default class Credit extends React.Component {
     }
     return (
       <>
-      <Header pageHandler={(page) => {this.props.pageHandler(page); this.setPage("flow1")}}  />
+      <Header pageHandler={(page) => {this.props.pageHandler(page); this.setState({currentPage:"flow1"})}}  />
       <div className="cblt-outer-container cblt-outer-container-bottom">
           {page}
       </div>
@@ -78,15 +90,30 @@ function Card(props) {
   );
 }
 
+const cardLookup = {
+  "bronze-card": 60,
+  "black-card": 210,
+  "silver-card": 120
+}
+
 class CreditStart extends React.Component {
-  
+ 
+  clickHandle = (page, productInternal, productName) => {
+    this.props.pager(page);
+    dataObject.update({product: {
+      internalName: productInternal,
+      name: productName,
+      revenue: cardLookup[productInternal]
+    }});
+  }
+
   render() {
     return (
       <>
         <img alt="person tapping card against mobile scanner from another person"
-        className="cblt-banner-image" src="imgs/card-hand.jpg"/>
+        className="cblt-banner-image" src="/imgs/card-hand.jpg"/>
         <div className="cblt-inner-container">
-          <div className="cblt-section-title">Credit products at Cobolt</div>
+          <div className="cblt-section-title">Credit products at Cobalt</div>
         </div>
           <div className="cblt-feature-text-box-center">
             Get the credit card that works for you!
@@ -96,16 +123,16 @@ class CreditStart extends React.Component {
        It's convenient, convenient! With the choice to complete your payment online or on the day of your order, you'll save money by not needing to worry about incoming bills or coordinating all your payments. Cobalt will automatically bill you for the fees, if any, associated with your order, plus you'll qualify for the Cobalt Cash back on your purchases in the meantime. 
         </p>
         <div className="cblt-feature-container-3">
-          <Card title="Bronze Card" img="imgs/bronze-card.jpg" fee="0" rate="21.0" cb="0"
-          onClick={() => this.props.pager("flow2")}>
+          <Card title="Bronze Card" img="/imgs/bronze-card.jpg" fee="0" rate="21.0" cb="0"
+          onClick={() => this.clickHandle('flow2', 'bronze-card', 'Bronze Card')}>
             Limited Starbucks® travel. Also, call our Travelers Assistance Line at 800-555-2077 Monday-Friday between 8:00 AM to 6:00 PM PST. We are happy to help our customers find the appropriate travel credit to meet their needs.  To schedule an appointment, please call our telephone number (800-555-2077) or complete the Online Request for Referral form and send it to...
           </Card>
-          <Card title="Black Card" img="imgs/black-card.jpg" fee="210" rate="19.90" cb="3" 
-          onClick={() => this.props.pager("flow2")}>
+          <Card title="Black Card" img="/imgs/black-card.jpg" fee="210" rate="19.90" cb="3" 
+          onClick={() => this.clickHandle('flow2', 'black-card', 'Black Card')}>
             Choose a card that offers travel points that go up significantly as the price of your trips go up. Travel a lot? Get a card that rewards you with travel points you can redeem!
           </Card>
-          <Card title="Silver Card" img="imgs/silver-card.jpg" fee="60" rate="20.00" cb="1"
-          onClick={() => this.props.pager("flow2")}>
+          <Card title="Silver Card" img="/imgs/silver-card.jpg" fee="60" rate="20.00" cb="1"
+          onClick={() => this.clickHandle('flow2', 'silver-card', 'Silver Card')}>
             Silver mastercard credit card, even in cash.  Hello, you've reached the hidden page that guarantees your precious wallet may never get lost again! All the cards have been marked with the letter "e" inside the card, to reflect the hidden line.  Discovering a £10 Super Deluxe Deed Card You really need to read this one, as it completely changes the direction of these credit cards.
           </Card>
         </div>
@@ -116,12 +143,34 @@ class CreditStart extends React.Component {
 }
 
 class UpsellCredit extends React.Component {
+  constructor(props) {
+    super(props);
+    // If we already have a black card, skip
+    console.log(dataObject.g.internalName);
+    if (dataObject.g.product.internalName === 'black-card') {
+      props.pager('flow5');
+      return;
+    }
+  }
+  
+  clickHandle = (page, productInternal, productName) => {
+    this.props.pager(page);
+    dataObject.update({
+      product: {
+        internalName: productInternal,
+        name: productName,
+        revenue: cardLookup[productInternal]
+      },
+      internalCampaign: `upsell-${productInternal}`
+    });
+  }
+
 	render() {
 		return (
 		<div className="cblt-inner-container">
       <div className="cblt-feature-container-solo">
-        <Card title="Black Card" img="imgs/black-card.jpg" fee="210" rate="19.90" cb="3"
-        onClick={() => this.props.pager('flow5')}
+        <Card title="Black Card" img="/imgs/black-card.jpg" fee="210" rate="19.90" cb="3"
+        onClick={() => this.clickHandle('flow5', 'black-card', 'Black Card')}
         solo={true}
         buttonText="Yes, accept the new offer"
         buttonTextFail="No, stick with my previous offer"

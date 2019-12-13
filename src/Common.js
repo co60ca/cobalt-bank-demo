@@ -1,4 +1,11 @@
 import React from 'react';
+import {dataObject} from './DataObject.js';
+
+const pageLookup = {
+  credit: "Credit Cards",
+  insurance: "Insurance Offerings",
+  home: "Home Page",
+}
 
 function HeaderLink(props) {
   return (
@@ -10,15 +17,38 @@ function HeaderLink(props) {
   );
 }
 
+var te = true;
+export function track(id, detail) {
+  if (!te) {
+    return null;
+  }
+  if (! window._satellite) {
+    console.error('_satellite is undefined, tracking will fail');
+    te = false;
+    return null;
+  } 
+  return window._satellite.track(id, detail);
+}
+
+export function changeURL() {
+//  console.log('changeURL');
+//  console.log(...arguments);
+  track('Page Change');
+  return window.history.pushState(...arguments);
+}
+
 export class Header extends React.Component {
   render() {
-    let pHandle = this.props.pageHandler;
+    let pHandle = (page) => {
+      this.props.pageHandler(page);
+      dataObject.update({internalName: page, name: pageLookup[page]});
+    }
     return (
       <div className="cblt-outer-container">
         <div className="cblt-inner-container">
           <div onClick={(e) => pHandle('home')} className="logo-container">
-            <img alt="Company Logo" src="imgs/ic_munvo.png"/> 
-            <div className="logo-text">Cobolt Bank</div>
+            <img alt="Company Logo" src="/imgs/ic_munvo.png"/> 
+            <div className="logo-text">Cobalt Bank</div>
             <div className="login-text">Sign In</div>
           </div>
         </div>
