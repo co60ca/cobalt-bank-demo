@@ -2,7 +2,7 @@
 import React from 'react';
 import {changeURL, Header} from './Common.js';
 import FormContainer from './FormContainer.js';
-import {ReactiveForm, EnterYourDetails, EnterYourWorkHomeDetails, ThanksForYourOrder} from './CommonForms';
+import {EnterYourDetails, EnterYourWorkHomeDetails, ThanksForYourOrder} from './CommonForms';
 import {dataObject} from './DataObject.js';
 import './App.css';
 
@@ -161,7 +161,7 @@ class UpsellCredit extends React.Component {
         name: productName,
         revenue: cardLookup[productInternal]
       },
-      internalCampaign: `upsell-${productInternal}`
+      upsellCampaign: `upsell-${productInternal}`
     });
   }
 

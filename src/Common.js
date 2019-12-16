@@ -1,5 +1,16 @@
 import React from 'react';
-import {dataObject} from './DataObject.js';
+import {dataObject} from './DataObject';
+import store from './DataObject';
+
+var oldState = "";
+store.subscribe(() => {
+  let state = dataObject.g.internalName;
+  if (state !== oldState) {
+//    console.log(`Saw page change ${state}`);
+    track('page-change');
+  }
+  oldState = state;
+})
 
 const pageLookup = {
   credit: "Credit Cards",
@@ -19,12 +30,11 @@ function HeaderLink(props) {
 
 var te = true;
 export function track(id, detail) {
-  if (!te) {
-    return null;
-  }
   if (! window._satellite) {
-    console.error('_satellite is undefined, tracking will fail');
-    te = false;
+    if (!te) {
+      console.error('_satellite is undefined, tracking will fail');
+      te = false;
+    }
     return null;
   } 
   return window._satellite.track(id, detail);
@@ -33,7 +43,6 @@ export function track(id, detail) {
 export function changeURL() {
 //  console.log('changeURL');
 //  console.log(...arguments);
-  track('Page Change');
   return window.history.pushState(...arguments);
 }
 

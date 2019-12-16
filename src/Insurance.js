@@ -174,11 +174,11 @@ class EnterYourTrip extends ReactiveForm {
     </div>
 		<div className="cblt-inner-container">
       <div className="cblt-form-container">
-        <form className="cblt-form cblt-form-solo" action="">
+        <form className="cblt-form cblt-form-solo">
           <FormText label="location" labeltext="Location" type="text" name="location" value="Montreal" {...this.c}/>	
           <FormText label="departure" labeltext="Departure" type="date" name="departure" value="2020-09-23" {...this.c}/>	
           <FormText label="return" labeltext="Return" type="date" name="return" value="2020-09-30" {...this.c}/>	
-          <button className="button-success-small" onClick={this.onSuccess}>Next</button>
+          <button type="button" className="button-success-small" onClick={this.onSuccess}>Next</button>
         </form>
       </div>
 		</div>
@@ -229,7 +229,7 @@ class SelectCoverage extends React.Component {
           <FormText label="country" labeltext="Country" type="country" name="country" value={this.state.country} {...this.c} />	
           
           <FormText label="value" labeltext="Insured Value" type="number" name="value" value={this.state.value} {...this.c} />	
-          <button className="button-success-small" onClick={() => this.props.pager('flow4')}>Next</button>
+          <button type="button" className="button-success-small" onClick={() => this.props.pager('flow4')}>Next</button>
         </form>
       </div>
 		</div>
@@ -320,7 +320,7 @@ class UpsellInsurance extends React.Component {
     let p = Object.assign({}, productLookup[internalName]);
     p.revenue *= .9;
 
-    dataObject.update({product: p, internalCampaign: `upsell-${internalName}`});
+    dataObject.update({product: p, upsellCampaign: `upsell-${internalName}`});
   }
 
 	render() {

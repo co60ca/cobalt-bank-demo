@@ -21,7 +21,6 @@ class App extends React.Component {
     window.dataObject = dataObject; 
     window.dataStore = dataStore; 
     window.modify = modify; 
-
   }
  
   setPage(page, args={}) {

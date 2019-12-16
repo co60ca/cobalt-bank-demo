@@ -2,7 +2,7 @@ import { createSlice, configureStore } from '@reduxjs/toolkit';
 
 const initialState = {
   internalName: "home",
-  name: "Home",
+  name: "Home Page",
   product: {
     internalName: null,
     name: null,

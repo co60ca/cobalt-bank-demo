@@ -173,7 +173,7 @@ export class PaymentDetails extends ReactiveForm {
             />
           </form>
         </div>
-        <button className="button-success-small" onClick={this.buttonSuccess}>
+        <button type="button" className="button-success-small" onClick={this.buttonSuccess}>
           Complete Order
         </button>
       </div>
@@ -269,6 +269,7 @@ export class EnterYourDetails extends ReactiveForm {
                 {...this.c}
               />
               <button
+                type="button"
                 className="button-success-small"
                 onClick={this.buttonSuccess}>
                 Next
@@ -401,6 +402,7 @@ export class EnterYourWorkHomeDetails extends ReactiveForm {
                 {...this.c}
               />
               <button
+                type="button"
                 className="button-success-small"
                 onClick={this.buttonSuccess}>
                 Next
