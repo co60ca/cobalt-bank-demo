@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {changeURL, Header} from './Common.js';
+import {changeURL, Header, CbltImg} from './Common.js';
 import FormContainer from './FormContainer.js';
 import {EnterYourDetails, EnterYourWorkHomeDetails, ThanksForYourOrder} from './CommonForms';
 import {dataObject} from './DataObject.js';
@@ -15,24 +15,53 @@ const pageLookup = {
   "credit-flow6": "Credit - Confirmation of Application",
 }
 
+const fadeTimer = 500;
+
 export default class Credit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPage: "flow1"
+      currentPage: "flow1",
+      fade: "out-start"
     }
     this.setPage = this.setPage.bind(this);
 
+    setTimeout(this.setPage, 1, this.state.currentPage, this.state.type);
   }
 
-	setPage(pagename, type) {
-    let internalPage = `credit-${pagename}`
-		this.setState({currentPage: pagename});
-    if (type) {
-      this.setState({currentPage: pagename, type: type});
+	setPage = (pagename, type, skip) => {
+    // Don't change backwards, fixes a problem with flow5 looping
+    if (this.state.currentPage > pagename) {
+      return;
     }
-    changeURL({}, pageLookup[internalPage], `/credit/${pagename}`);
-    dataObject.update({internalName: internalPage, name: pageLookup[internalPage]});
+    switch (this.state.fade) {
+      case "fadein":
+        // To fade out
+        if (this.state.currentPage !== pagename) {
+          this.setState({fade: "fadeout"});
+          setTimeout(this.setPage, fadeTimer, pagename, type);
+        }
+        break;
+      case "fadeout":
+        // To be "out"
+        this.setState({fade: "out"});
+        setTimeout(this.setPage, 1, pagename, type);
+        break;
+      case "out-start":
+      case "out":
+        // To fade in
+        this.setState({fade: "fadein", currentPage: pagename});
+        if (type) {
+          this.setState({fade: "fadein", currentPage: pagename, type: type});
+        }
+        let internalPage = `credit-${pagename}`
+        changeURL({}, pageLookup[internalPage], `/credit/${pagename}`);
+        dataObject.update({internalName: internalPage, name: pageLookup[internalPage]});
+        setTimeout(this.setPage, fadeTimer, pagename, type);
+        break;
+      default:
+        break;
+    }
 	}
 
   render() {
@@ -49,7 +78,7 @@ export default class Credit extends React.Component {
     return (
       <>
       <Header pageHandler={(page) => {this.props.pageHandler(page); this.setState({currentPage:"flow1"})}}  />
-      <div className="cblt-outer-container cblt-outer-container-bottom">
+      <div className={"cblt-outer-container cblt-outer-container-bottom cblt-page-" + this.state.fade}> 
           {page}
       </div>
       </>
@@ -82,7 +111,7 @@ function Card(props) {
     <FormContainer onClick={props.onClick} {...props}>
       <div className="cblt-product-title">{props.title}</div>
       <div className="cblt-image-box">
-        <img alt={"props.title"} src={props.img}/>
+        <CbltImg alt={"props.title"} src={props.img}/>
       </div>
       <p>{props.children}</p>
       <Features {...props}/>
@@ -110,7 +139,7 @@ class CreditStart extends React.Component {
   render() {
     return (
       <>
-        <img alt="person tapping card against mobile scanner from another person"
+        <CbltImg alt="person tapping card against mobile scanner from another person"
         className="cblt-banner-image" src="/imgs/card-hand.jpg"/>
         <div className="cblt-inner-container">
           <div className="cblt-section-title">Credit products at Cobalt</div>
@@ -146,7 +175,6 @@ class UpsellCredit extends React.Component {
   constructor(props) {
     super(props);
     // If we already have a black card, skip
-    console.log(dataObject.g.internalName);
     if (dataObject.g.product.internalName === 'black-card') {
       props.pager('flow5');
       return;

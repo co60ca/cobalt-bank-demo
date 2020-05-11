@@ -1,5 +1,5 @@
 import React from 'react';
-import {changeURL, Header} from './Common.js';
+import {changeURL, Header, CbltImg} from './Common.js';
 import FormBox from './FormContainer.js';
 import {ReactiveForm, EnterYourDetails, ThanksForYourOrder, PaymentDetails, FormText} from './CommonForms';
 import {dataObject} from './DataObject.js';
@@ -46,13 +46,16 @@ const productLookup = {
   }
 };
 
+const fadeTimer = 500;
+
 export default class Insurance extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       currentPage: "flow1",
-      type: "base"
+      type: "base",
+      fade: "out-start"
     }
     if (this.props.flow) {
       this.state.currentPage = this.props.flow;
@@ -60,19 +63,45 @@ export default class Insurance extends React.Component {
     if (this.props.type) {
       this.state.type = this.props.type;
     }
-    this.setPage = this.setPage.bind(this);
+    this.updateDL(this.state.currentPage);
+    setTimeout(this.setPage, 1, this.state.currentPage, this.state.type);
   }
 
-	setPage(pagename, type) {
-		this.setState({currentPage: pagename});
+	setPage = (pagename, type) => {
+    switch (this.state.fade) {
+      case "fadein":
+        // To fade out
+        if (this.state.currentPage !== pagename) {
+          this.setState({fade: "fadeout"});
+          setTimeout(this.setPage, fadeTimer, pagename, type);
+        }
+        break;
+      case "fadeout":
+        // To be "out"
+        this.setState({fade: "out"});
+        setTimeout(this.setPage, 1, pagename, type);
+        break;
+      case "out-start":
+      case "out":
+        // To fade in
+        this.setState({fade: "fadein", currentPage: pagename});
+        if (type) {
+          this.setState({fade: "fadein", currentPage: pagename, type: type});
+        }
+        this.updateDL(pagename);
+        setTimeout(this.setPage, fadeTimer, pagename, type);
+        break;
+      default:
+        break;
+    }
+	}
+
+  updateDL = (pagename) => {
     let pagetype = this.state.type || "base";
     let internalPage = `insurance-${pagetype}-${pagename}`
-    if (type) {
-      this.setState({currentPage: pagename, type: type});
-    }
-    dataObject.update({internalName: internalPage, name: pageLookup[internalPage]});
     changeURL({}, pageLookup[internalPage], `/insurance/${pagetype}/${pagename}`);
-	}
+    dataObject.update({internalName: internalPage, name: pageLookup[internalPage]});
+  }
 
   render() {
     var page = null;
@@ -95,7 +124,7 @@ export default class Insurance extends React.Component {
     return (
       <>
       <Header pageHandler={(page) => {this.props.pageHandler(page); this.setState({currentPage:"flow1"})}} />
-      <div className="cblt-outer-container cblt-outer-container-bottom">
+      <div className={"cblt-outer-container cblt-outer-container-bottom cblt-page-" + this.state.fade}>
         {page}
       </div>
       </>
@@ -109,7 +138,7 @@ class InsuranceStart extends React.Component {
   render() {
     return (
     <>
-      <img alt="person sitting in an airport with a bag" className="cblt-banner-image" src="/imgs/insurance.jpg"/>
+      <CbltImg alt="person sitting in an airport with a bag" className="cblt-banner-image" src="/imgs/insurance.jpg"/>
       <div className="cblt-inner-container">
         <div className="cblt-section-title">Insurance offerings at Cobalt</div>
       </div>
@@ -124,14 +153,14 @@ class InsuranceStart extends React.Component {
           <FormBox onClick={() => {this.props.pager('flow2', "travel")}}>
             <div className="cblt-product-title">Travel Medical Insurance</div>
             <div className="cblt-image-box">
-              <img alt="plane taking off" src="/imgs/plane.jpg"/>
+              <CbltImg alt="plane taking off" src="/imgs/plane.jpg"/>
             </div>
             <p>Cobalt Medical Travel Insurance gives you piece of mind when traveling. Not only do our experts, like your doctor, provide you with expert, advice, but our travel experts work together to create your personalized travel plan. We are more than willing to help you make your vacation a much better experience. You can get access to travel insurance with Cobalt Medical Travel Insurance.  All you need to do is answer a few questions and Cobalt Medical Travel Insurance will provide the right travel insurance solution for you.  Ready to Start Traveling?</p>
           </FormBox>
           <FormBox onClick={() => this.props.pager('flow2', "home")}>
             <div className="cblt-product-title">Home Owner's Insurance</div>
             <div className="cblt-image-box">
-              <img alt="family with a mother father and two children" src="/imgs/family-home.jpg"/>
+              <CbltImg alt="family with a mother father and two children" src="/imgs/family-home.jpg"/>
             </div>
             <p>Cobalt Bank protects families from all types of disasters and provides an extensive and dedicated line of insurance for them. Our insurance covers you for:  Hurricane and Flood Damage  Home Fires  Buildings Collapse  Signage loss  Insurance may be expensive. But your home insurance is a commitment from you to yourself, to your family and to your business. Here at Cobalt Bank we are there for you.</p>
           </FormBox>
@@ -243,7 +272,7 @@ function InsurOption(props) {
     <FormBox onClick={props.onClick} {...props}>
       <div className="cblt-product-title">{props.title}</div>
       <div className="cblt-image-box">
-        <img alt={props.imgalt} src={props.img}/>
+        <CbltImg alt={props.imgalt} src={props.img}/>
       </div>
       <p>{props.children}</p>
       <p><b>Cost:</b> ${props.cost}</p>

@@ -53,11 +53,13 @@ export class Header extends React.Component {
       dataObject.update({internalName: page, name: pageLookup[page]});
     }
     return (
-      <div className="cblt-outer-container">
+      <div className="cblt-outer-container cblt-header">
         <div className="cblt-inner-container">
-          <div onClick={(e) => pHandle('home')} className="logo-container">
-            <img alt="Company Logo" src="/imgs/ic_munvo.png"/> 
-            <div className="logo-text">Cobalt Bank</div>
+          <div className="logo-container">
+            <div onClick={(e) => pHandle('home')} className="cblt-clickable">
+              <img width="48px" alt="Company Logo" src="/imgs/ic_munvo.png"/> 
+              <div className="logo-text">Cobalt Bank</div>
+            </div>
             <div className="login-text">Sign In</div>
           </div>
         </div>
@@ -71,6 +73,24 @@ export class Header extends React.Component {
           </div>
         </div>
       </div>
+    );
+  }
+}
+
+export class CbltImg extends React.Component {
+  constructor() {
+    super()
+    this.state = {fade: "out"}
+  }
+
+  render() {
+    let classn = this.props.className || "";
+    classn += " cblt-" + this.state.fade;
+    let img = <img alt="silence warning about not setting props, img alt will be set by caller"
+      {...this.props} onLoad={() => {this.setState({fade: "fadein-fast"});}} className={classn}/>;
+    this.img = img;
+    return (
+      img
     );
   }
 }
