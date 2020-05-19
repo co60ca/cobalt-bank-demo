@@ -1,8 +1,10 @@
 import { createSlice, configureStore } from '@reduxjs/toolkit';
+import lodash from 'lodash';
 
 const initialState = {
   internalName: "home",
   name: "Home Page",
+  section: null,
   product: {
     internalName: null,
     name: null,
@@ -52,8 +54,12 @@ const initialState = {
     destination: null,
     departureDate: null,
     returnDate: null,
+  },
+  login: {
+    username: null,
+    visid: null,
+    logstatus: "Logged out"
   }
-
 
 }
 
@@ -78,9 +84,7 @@ const _dataObject = {
   get g() {return store.getState().global;},
   replace(newstate) {store.dispatch(dataObjectSlice.actions.modify(newstate))},
   update(newstate) {
-    //console.log(`Requested update to state:`);
-    //console.log(newstate);
-    const newObj = Object.assign(Object.assign({}, store.getState().global), newstate);
+    const newObj = lodash.merge({}, store.getState().global, newstate);
     store.dispatch(dataObjectSlice.actions.modify(newObj));
   },
 

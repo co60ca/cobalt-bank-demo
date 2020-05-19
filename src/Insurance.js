@@ -184,8 +184,9 @@ class EnterYourTrip extends ReactiveForm {
     }
   }
 
-  onSuccess = () => {
-    this.props.pager('flow4')
+  onSuccess = (event) => {
+    event.preventDefault();
+    this.props.pager('flow4');
     let s = this.state;
     dataObject.update({
         travel: {
@@ -203,11 +204,11 @@ class EnterYourTrip extends ReactiveForm {
     </div>
 		<div className="cblt-inner-container">
       <div className="cblt-form-container">
-        <form className="cblt-form cblt-form-solo">
+        <form className="cblt-form cblt-form-solo" onSubmit={this.onSuccess}>
           <FormText label="location" labeltext="Location" type="text" name="location" value="Montreal" {...this.c}/>	
           <FormText label="departure" labeltext="Departure" type="date" name="departure" value="2020-09-23" {...this.c}/>	
           <FormText label="return" labeltext="Return" type="date" name="return" value="2020-09-30" {...this.c}/>	
-          <button type="button" className="button-success-small" onClick={this.onSuccess}>Next</button>
+          <button className="button-success-small">Next</button>
         </form>
       </div>
 		</div>
@@ -229,7 +230,8 @@ class SelectCoverage extends React.Component {
     }
   }
 
-  onSuccess = () => {
+  onSuccess = (event) => {
+    event.preventDefault();
     this.props.pager('flow4')
     let s = this.state;
     dataObject.update({
@@ -251,14 +253,14 @@ class SelectCoverage extends React.Component {
     </div>
 		<div className="cblt-inner-container">
       <div className="cblt-form-container">
-        <form className="cblt-form cblt-form-solo" action="">
+        <form className="cblt-form cblt-form-solo" onSubmit={this.onSuccess}>
           <FormText label="streetaddress" labeltext="Street Address" type="text" name="streetaddress" value={this.state.streetaddress} />	
           <FormText label="city" labeltext="City" type="text" name="city" value={this.state.city} {...this.c} />	
           <FormText label="state" labeltext="State/Province" type="text" name="state" value={this.state.state} {...this.c} />	
           <FormText label="country" labeltext="Country" type="country" name="country" value={this.state.country} {...this.c} />	
           
           <FormText label="value" labeltext="Insured Value" type="number" name="value" value={this.state.value} {...this.c} />	
-          <button type="button" className="button-success-small" onClick={() => this.props.pager('flow4')}>Next</button>
+          <button className="button-success-small">Next</button>
         </form>
       </div>
 		</div>

@@ -140,7 +140,7 @@ class CreditStart extends React.Component {
     return (
       <>
         <CbltImg alt="person tapping card against mobile scanner from another person"
-        className="cblt-banner-image" src="/imgs/card-hand.jpg"/>
+        className="cblt-banner-image" src={process.env.PUBLIC_URL + "/imgs/card-hand.jpg"}/>
         <div className="cblt-inner-container">
           <div className="cblt-section-title">Credit products at Cobalt</div>
         </div>

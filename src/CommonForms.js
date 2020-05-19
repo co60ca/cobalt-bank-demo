@@ -2,6 +2,7 @@ import React from 'react';
 import {dataObject} from './DataObject.js';
 import './App.css';
 
+// name is used to match the parents (onChange) key see ReactiveForm
 export class FormText extends React.Component {
   render() {
     let props = this.props;
@@ -27,6 +28,8 @@ export class FormText extends React.Component {
   }
 }
 
+// this.c is used to set state on this component, i.e. the concrete classes state, useful
+// for forms
 export class ReactiveForm extends React.Component {
   constructor() {
     super();
@@ -34,7 +37,9 @@ export class ReactiveForm extends React.Component {
   }
 
   setFormData = (key, value) => {
-    this.setState({key, value});
+    let obj = {}
+    obj[key] = value;
+    this.setState(obj);
     //console.log(`Debug: key: ${key}, value: ${value}`);
   };
 }
@@ -60,7 +65,8 @@ export class PaymentDetails extends ReactiveForm {
     };
   }
 
-  buttonSuccess = () => {
+  buttonSuccess = (event) => {
+    event.preventDefault();
     this.props.pager(this.props.nextpage);
     let s = this.state;
     dataObject.update({
@@ -82,100 +88,105 @@ export class PaymentDetails extends ReactiveForm {
       },
     });
   };
+
   render() {
     return (
       <div className="cblt-inner-container">
         <div className="cblt-feature-container">
-          <form className="cblt-form" action="">
-            <p>Billing Address</p>
-            <FormText
-              label="firstname"
-              labeltext="First Name"
-              type="text"
-              name="firstname"
-              value={this.state.firstname}
-              {...this.c}
-            />
-            <FormText
-              label="lastname"
-              labeltext="Last Name"
-              type="text"
-              name="lastname"
-              value={this.state.lastname}
-              {...this.c}
-            />
-            <FormText
-              label="streetaddress"
-              labeltext="Street Address"
-              type="text"
-              name="streetaddress"
-              value={this.state.streetaddress}
-              {...this.c}
-            />
-            <FormText
-              label="city"
-              labeltext="City"
-              type="text"
-              name="city"
-              value={this.state.city}
-              {...this.c}
-            />
-            <FormText
-              label="state"
-              labeltext="State/Province"
-              type="text"
-              name="state"
-              value={this.state.state}
-              {...this.c}
-            />
-            <FormText
-              label="country"
-              labeltext="Country"
-              type="country"
-              name="country"
-              value={this.state.country}
-              {...this.c}
-            />
-          </form>
-          <form className="cblt-form" action="">
-            <p>Card Details</p>
-            <FormText
-              label="card"
-              labeltext="Card"
-              type="text"
-              name="card"
-              value={this.state.card}
-              {...this.c}
-            />
-            <FormText
-              label="name"
-              labeltext="Name on Card"
-              type="text"
-              name="nameoncard"
-              value={this.state.nameoncard}
-              {...this.c}
-            />
-            <FormText
-              label="securitycode"
-              labeltext="Security Code"
-              type="text"
-              name="securitycode"
-              value={this.state.securitycode}
-              {...this.c}
-            />
-            <FormText
-              label="expires"
-              labeltext="Expiry Date"
-              type="date"
-              name="expires"
-              value={this.state.expires}
-              {...this.c}
-            />
+          <form className="cblt-form" onSubmit={this.buttonSuccess}>
+            <div className="cblt-form-column">
+              <div>
+              <p>Billing Address</p>
+              <FormText
+                label="firstname"
+                labeltext="First Name"
+                type="text"
+                name="firstname"
+                value={this.state.firstname}
+                {...this.c}
+              />
+              <FormText
+                label="lastname"
+                labeltext="Last Name"
+                type="text"
+                name="lastname"
+                value={this.state.lastname}
+                {...this.c}
+              />
+              <FormText
+                label="streetaddress"
+                labeltext="Street Address"
+                type="text"
+                name="streetaddress"
+                value={this.state.streetaddress}
+                {...this.c}
+              />
+              <FormText
+                label="city"
+                labeltext="City"
+                type="text"
+                name="city"
+                value={this.state.city}
+                {...this.c}
+              />
+              <FormText
+                label="state"
+                labeltext="State/Province"
+                type="text"
+                name="state"
+                value={this.state.state}
+                {...this.c}
+              />
+              <FormText
+                label="country"
+                labeltext="Country"
+                type="country"
+                name="country"
+                value={this.state.country}
+                {...this.c}
+              />
+            </div>
+            <div>
+              <p>Card Details</p>
+              <FormText
+                label="card"
+                labeltext="Card"
+                type="text"
+                name="card"
+                value={this.state.card}
+                {...this.c}
+              />
+              <FormText
+                label="name"
+                labeltext="Name on Card"
+                type="text"
+                name="nameoncard"
+                value={this.state.nameoncard}
+                {...this.c}
+              />
+              <FormText
+                label="securitycode"
+                labeltext="Security Code"
+                type="text"
+                name="securitycode"
+                value={this.state.securitycode}
+                {...this.c}
+              />
+              <FormText
+                label="expires"
+                labeltext="Expiry Date"
+                type="date"
+                name="expires"
+                value={this.state.expires}
+                {...this.c}
+              />
+            </div>
+            </div>
+            <button className="button-success-small">
+              Complete Order
+            </button>
           </form>
         </div>
-        <button type="button" className="button-success-small" onClick={this.buttonSuccess}>
-          Complete Order
-        </button>
       </div>
     );
   }
@@ -215,7 +226,8 @@ export class EnterYourDetails extends ReactiveForm {
   }
 
 
-  buttonSuccess = () => {
+  buttonSuccess = (event) => {
+    event.preventDefault();
     let s = this.state;
     dataObject.update({
       user: {
@@ -235,7 +247,7 @@ export class EnterYourDetails extends ReactiveForm {
         </div>
         <div className="cblt-inner-container">
           <div className="cblt-form-container">
-            <form className="cblt-form cblt-form-solo" action="">
+            <form className="cblt-form cblt-form-solo" onSubmit={this.buttonSuccess}>
               <FormText
                 label="firstname"
                 labeltext="First Name"
@@ -268,10 +280,7 @@ export class EnterYourDetails extends ReactiveForm {
                 value={this.state.dateofbirth}
                 {...this.c}
               />
-              <button
-                type="button"
-                className="button-success-small"
-                onClick={this.buttonSuccess}>
+              <button className="button-success-small" >
                 Next
               </button>
             </form>
@@ -301,7 +310,8 @@ export class EnterYourWorkHomeDetails extends ReactiveForm {
     }
   }
 
-  buttonSuccess = () => {
+  buttonSuccess = (event) => {
+    event.preventDefault();
     this.props.pager(this.props.nextpage);
     let s = this.state;
     dataObject.update({
@@ -326,7 +336,7 @@ export class EnterYourWorkHomeDetails extends ReactiveForm {
         </div>
         <div className="cblt-inner-container">
           <div className="cblt-form-container">
-            <form className="cblt-form cblt-form-solo" action="">
+            <form className="cblt-form cblt-form-solo" onSubmit={this.buttonSuccess}>
               <FormText
                 label="homeworth"
                 labeltext="Home Worth"
@@ -401,10 +411,7 @@ export class EnterYourWorkHomeDetails extends ReactiveForm {
                 value={this.state.grossincome}
                 {...this.c}
               />
-              <button
-                type="button"
-                className="button-success-small"
-                onClick={this.buttonSuccess}>
+              <button className="button-success-small" >
                 Next
               </button>
             </form>

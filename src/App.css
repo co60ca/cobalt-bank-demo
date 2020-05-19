@@ -253,6 +253,37 @@ body {
   border: 1px solid #fff;
   transition: 0.3s;
 }
+
+.message-success {
+  color: #333;
+  background: #a3ffaf;
+  border: 1px solid #52ff68;
+  display: block;
+  margin: auto 1rem 0 1rem;
+  padding: 14px 0px;
+  text-align: center;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.message-fail {
+  color: #333;
+  background: #ffe594;
+  border: 1px solid #ffc107;
+  display: block;
+  margin: auto 1rem 0 1rem;
+  padding: 14px 0px;
+  text-align: center;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.inline-buttons {
+  display: flex;
+  padding: 1rem;
+  flex-direction: row;
+}
+
 .logo-container { 
   padding: 0.5rem;
   display: flex;
@@ -265,7 +296,7 @@ body {
 	align-items: baseline;
 }
 
-.logo-container > .cblt-clickable > img {
+.logo-container .cblt-clickable img {
   filter: invert(100%);
   height: 3rem;
   vertical-align: bottom;
@@ -275,13 +306,34 @@ body {
   margin: 0 1rem;
 	justify-self: last baseline;
 }
+
 .login-text {
+  color: #c20000;
+  cursor: pointer;
   display: inline-flex;
   margin: 0 1rem;
 	margin-left: auto;
 	align-self: center;
-	border: 2px dashed rgba(0, 0, 0, 0.3);
 	padding: 0.5rem;
+  border-bottom: solid 1px white;
+}
+
+.login-text.logout {
+  margin-left: 0;
+}
+
+.account-name {
+  color: #333;
+  display: inline-flex;
+  margin: 0 1rem;
+	margin-left: auto;
+	align-self: center;
+	padding: 0.5rem;
+  border-bottom: solid 1px white;
+}
+
+.login-text:hover {
+  border-bottom: solid 1px #c20000;
 }
 
 .cblt-feature-text-box-center {
@@ -343,4 +395,23 @@ body {
   color: rgba(47, 47, 47, 0.8);
   margin: 0.5rem 1.5rem 0 1.5rem;
   font-size: 0.8rem;
+}
+
+.cblt-form-column {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.ReactModal__Overlay {
+    opacity: 0;
+    transition: opacity 500ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open{
+    opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+    opacity: 0;
 }
